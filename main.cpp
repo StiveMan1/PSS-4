@@ -38,22 +38,22 @@ int main(){
         if(input == "exit" || input == "out"){
             return 1;
         }else if(input == "login"){
-            // name = x.SingIn();
+//            name = x.SingIn();
             name = y.SingIn();
         }else if(input == "register"){
-            // x.SingUp();
+//             x.SingUp();
             y.SingUp();
         }else if(input == "info"){
-            // x.info();
+//             x.info();
             y.info();
         }else if(input == "set_payment"){
-            x.set_payment();
+//            x.set_payment();
         }else if(input == "set_pinned_address"){
-            x.set_pinned_address();
+//            x.set_pinned_address();
         }else if(input == "order_driver"){
-            x.order_driver();
+//            x.order_driver();
         }else if(input == "show_history"){
-            x.show_history();
+//            x.show_history();
             y.show_history();
         }else if(input == "show_active_orders"){
             y.show_active_orders();

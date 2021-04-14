@@ -15,7 +15,6 @@
 #include "Order.h"
 #include "Passenger.h"
 #include <dir.h>
-#include <filesystem>
 
 using namespace std;
 
@@ -38,14 +37,14 @@ int main(){
         if(input == "exit" || input == "out"){
             return 1;
         }else if(input == "login"){
-            // name = x.SingIn();
-            name = y.SingIn();
+             name = x.SingIn();
+//            name = y.SingIn();
         }else if(input == "register"){
-            // x.SingUp();
-            y.SingUp();
+             x.SingUp();
+//            y.SingUp();
         }else if(input == "info"){
-            // x.info();
-            y.info();
+             x.info();
+//            y.info();
         }else if(input == "set_payment"){
             x.set_payment();
         }else if(input == "set_pinned_address"){
@@ -53,18 +52,18 @@ int main(){
         }else if(input == "order_driver"){
             x.order_driver();
         }else if(input == "show_history"){
-            x.show_history();
-            y.show_history();
+             x.show_history();
+//            y.show_history();
         }else if(input == "show_active_orders"){
-            y.show_active_orders();
+//            y.show_active_orders();
         }else if(input == "set_status"){
-            y.set_status();
+//            y.set_status();
         }else if(input == "set_car"){
-            y.set_car();
+//            y.set_car();
         }else if(input == "add_bottles"){
-            y.add_bottles();
+//            y.add_bottles();
         }else if(input == "select_order"){
-            y.select_order();
+//            y.select_order();
         }
     }
 }

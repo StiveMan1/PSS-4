@@ -1,8 +1,0 @@
-C:\Users\04024\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\203.7148.70\bin\cmake\win\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" C:\Users\04024\CLionProjects\untitled3
--- Configuring done
-CMake Error at CMakeLists.txt:6 (add_executable):
-  CXX_STANDARD is set to invalid value '-std=c++11;-pthread'
-
-
--- Generating done
-CMake Generate step failed.  Build files cannot be regenerated correctly.

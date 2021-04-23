@@ -23,10 +23,13 @@ using namespace std;
 class PassengerGateway{
 private:
     Passenger _current_user;
-    Car _current_car;
-    Order _current_order;
+    bool in = false;
 public:
     void info(){
+        if(!in){
+            cout<<"You need to sing in\n";
+            return;
+        }
         cout<<"User Name : " << _current_user.get_name()<<endl;
         cout<<"Pind Address : " << _current_user.get_pinned()<<endl;
         cout<<"Rating : " << _current_user.get_rating()<<endl;
@@ -38,6 +41,10 @@ public:
         }
     }
     void set_pinned_address(){
+        if(!in){
+            cout<<"You need to sing in\n";
+            return;
+        }
         string name;
         int x, y;
         cout<<"Address Name : ";
@@ -49,10 +56,14 @@ public:
         _current_user.set_pinned_address(Address(x,y,name));
     }
     void set_payment(){
+        if(!in){
+            cout<<"You need to sing in\n";
+            return;
+        }
         int type;
         cout<<"Coose payment type:\n1 - Cash\n2 - Card\nWrite type : ";
         cin >> type;
-        string numbers = "", date = "";
+        string numbers, date;
         if(type == 2){
             cout<<"Card Number : ";
             cin>>numbers;
@@ -62,6 +73,14 @@ public:
         _current_user.set_payment(Payment(type == 2, numbers, date));
     }
     void order_driver(){
+        if(!in){
+            cout<<"You need to sing in\n";
+            return;
+        }
+        if(_current_user.is_blocked()){
+            cout<<"You can not make any orders\n";
+            return;
+        }
         int type, car_type;
         Address addressFrom, addressTo;
         Payment method = _current_user.get_method();
@@ -107,7 +126,7 @@ public:
         cout<<"4 - Business "<<sum * 2<<endl;
         cout<<"Write type : ";
         cin>> car_type;
-        sum *= 1 + float(car_type)/4;
+        sum =  int((double)sum * (1.0 + double(car_type)/4));
         cout<<"Select type:"<<endl;
         cout<<"1 - Use default payment method"<<endl;
         cout<<"2 - Card"<<endl;
@@ -126,15 +145,18 @@ public:
         }
         Order order = Order(addressFrom, addressTo, "", _current_user.get_name(), "" , method, sum);
         order.add_active();
-        _current_order = order;
         // add in oredr to driver select
     }
     void show_history(){
+        if(!in){
+            cout<<"You need to sing in\n";
+            return;
+        }
         ifstream file("Passengers/orderHistory/" + _current_user.get_name() + ".txt");
         string line; Order order;
         int i = 1;
         while(getline(file, line)){
-            order = order.from_string(line);
+            order = Order::from_string(line);
             cout<<"Number "<<i<<endl;
             order.print();
             i++;
@@ -142,8 +164,30 @@ public:
         }
     }
     void show_position(){
+        if(!in){
+            cout<<"You need to sing in\n";
+            return;
+        }
+        Order order = _current_user.get_active_order();
+        if(order.is_picked()){
+            cout<<"Position : " + Driver::get_driver(order.get_driver_name()).get_position() + '\n';
+        }else{
+            cout<<"No active orders\n";
+        }
     }
-    void SingUp(){
+    void show_order(){
+        if(!in){
+            cout<<"You need to sing in\n";
+            return;
+        }
+        Order order = _current_user.get_active_order();
+        if(order.is_picked()){
+            order.print();
+        }else{
+            cout<<"No active orders\n";
+        }
+    }
+    static void SingUp(){
         string name, password;
         cout<<"User Name : ";
         cin>>name;
@@ -155,6 +199,10 @@ public:
         cout<<"Registered\n";
     }
     string SingIn(){
+        if(in){
+            cout<<"You already in\n";
+            return _current_user.get_name();
+        }
         string name, password;
         cout<<"User Name : ";
         cin>>name;
@@ -162,7 +210,7 @@ public:
         cin>>password;
         bool tor = false;
         if(file_exists("Passengers/Users/" + name+ ".txt")){
-            Passenger x = Passenger().get_passenger(name);
+            Passenger x = Passenger::get_passenger(name);
             if(x.check_password(password)){
                 tor = true;
                 _current_user = x;
@@ -171,11 +219,34 @@ public:
         }
         if(tor){
             cout<<"Login\n";
+            in = true;
+            thread my_thread(update, this);
             return name;
         }else{
             cout<<"Error\n";
             return "";
         }
+    }
+    void rate_driver(){
+        if(!in){
+            cout<<"You need to sing in\n";
+            return;
+        }
+        int rating;
+        string driver_name = _current_user.get_active_order().get_driver_name();
+        cout<<"Rating Driver : "<<driver_name<<endl;
+        cout<<"Rate from 0 to 10 : ";
+        cin>>rating;
+        Driver::get_driver(driver_name).rate_driver(rating);
+    }
+    void LogOut(){
+        in = false;
+    }
+    static void update(PassengerGateway* gateway) {
+        while (gateway->in) {
+            gateway->_current_user = Passenger::get_passenger(gateway->_current_user.get_name());
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(10000));
     }
 };
 

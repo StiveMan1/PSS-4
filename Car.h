@@ -19,19 +19,19 @@ using namespace std;
 
 class Car{
 private:
-    string _model = "", _number = "", _color = "";
-    int _carType = 1, _freeBottleOfwater = 0;
+    string _model, _number, _color;
+    int _carType = 1, _freeBottleOfWater = 0;
 public:
-    Car(){}
-    Car(string model, string number, string color, int carType, int freeBottleOfwater = 0, Address coordinates = Address()){
-        _model = model;
-        _number = number;
-        _color = color;
+    Car()= default;
+    Car(string model, string number, string color, int carType, int freeBottleOfWater = 0, const Address& coordinates = Address()){
+        _model = std::move(model);
+        _number = std::move(number);
+        _color = std::move(color);
         _carType = carType;
-        _freeBottleOfwater = freeBottleOfwater;
+        _freeBottleOfWater = freeBottleOfWater;
     }
 
-    void parkRightInFrontOfTheEntrance(){
+    void parkRightInFrontOfTheEntrance() const{
         if(_carType == 4){
 
         }
@@ -45,12 +45,12 @@ public:
     string get_car_number(){
         return _number;
     }
-    int get_car_type(){
+    int get_car_type() const{
         return _carType;
     }
     static Car from_string(string data){
-        string name = "", res = "", model_ = "", number_ = "", color_ = "";
-        int carType_, freeBottleOfwater_;
+        string name, res, model_, number_, color_;
+        int carType_, freeBottleOfWater_;
         bool tor = false;
         for(int i=1;i<data.size();i++){
             if(data[i] == '\''){
@@ -83,9 +83,9 @@ public:
                 }else if(name == "color"){
                     color_ = res;
                 }else if(name == "carType"){
-                    carType_ = string_to_int(res);
-                }else if(name == "freeBottleOfwater"){
-                    freeBottleOfwater_ = string_to_int(res);
+                    carType_ = std::stoi(res);
+                }else if(name == "freeBottleOfWater"){
+                    freeBottleOfWater_ = std::stoi(res);
                 }
                 i+=1;
             }else{
@@ -96,16 +96,34 @@ public:
                 }
             }
         }
-        return Car(model_, number_, color_, carType_, freeBottleOfwater_);
+        return Car(model_, number_, color_, carType_, freeBottleOfWater_);
     }
     string to_string(){
-        return "{'model': "+_model+", 'number': " + _number + ", 'color': " + _color + ", 'carType': " + int_to_string(_carType) + ", 'freeBottleOfwater': " + int_to_string(_freeBottleOfwater) + "}";
+        return "{'model': "+_model+", 'number': " + _number + ", 'color': " + _color + ", 'carType': " + std::to_string(_carType) + ", 'freeBottleOfWater': " + std::to_string(_freeBottleOfWater) + "}";
     }
     void add_bottles(int count){
-        _freeBottleOfwater += count;
+        _freeBottleOfWater += count;
     }
-    int get_free_bottles(){
-        return _freeBottleOfwater;
+    int get_free_bottles() const {
+        return _freeBottleOfWater;
+    }
+    void print(){
+        cout<<"Car model : "<<get_car_model()<<endl;
+        cout<<"Car number : "<<get_car_number()<<endl;
+        cout<<"Car color : "<<get_car_color()<<endl;
+        cout<<"Car Type : ";
+        if(get_car_type() == 1){
+            cout<<"Economy\n";
+        }else if(get_car_type() == 2){
+            cout<<"Comfort\n";
+        }else if(get_car_type() == 3){
+            cout<<"ComfortPlus\n";
+        }else if(get_car_type() == 4){
+            cout<<"Business\n";
+        }
+        if(get_car_type() > 1){
+            cout<<"Free Bottle : "<<get_free_bottles()<<endl;
+        }
     }
 };
 

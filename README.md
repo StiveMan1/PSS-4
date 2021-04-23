@@ -1,9 +1,9 @@
 # PSS-4
 
-This code for passengers with using Passenger Gateway
+This code for passengers with using Driver Gateway
 
 
-Passenger Gateway command in console line :
+# Driver Gateway command in console line :
 
 
 login - for login in account

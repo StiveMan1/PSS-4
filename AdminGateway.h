@@ -140,7 +140,7 @@ public:
             return "";
         }
     }
-    void Out(){
+    void LogOut(){
         in = false;
     }
     void show_non_active_cars(){

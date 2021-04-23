@@ -17,17 +17,20 @@
 
 
 using namespace std;
-
+inline bool file_exists(const string& file_name) {
+    ifstream f(file_name.c_str());
+    return f.good();
+}
 class Payment{
 private:
-    string _card_number = "", _date = "";
+    string _card_number, _date;
 public:
     bool _is_card = false;
-    Payment(){}
+    Payment() = default;
     Payment(bool is_card, string card_number, string date){
         _is_card = is_card;
-        _card_number = card_number;
-        _date = date;
+        _card_number = std::move(card_number);
+        _date = std::move(date);
     }
     string get_card_number(){
         return _card_number;
@@ -36,7 +39,7 @@ public:
         return _date;
     }
     static Payment from_string(string data){
-        string name = "", res = "", card_number_ = "", date_ = "";
+        string name, res, card_number_, date_;
         bool tor = false, is_card = false;
         for(int i=1;i<data.size();i++){
             if(data[i] == '\''){
@@ -81,7 +84,7 @@ public:
         return Payment(is_card, card_number_, date_);
     }
     string to_string(){
-        string is_card = "";
+        string is_card;
         if(_is_card){
             is_card = "1";
         }else{

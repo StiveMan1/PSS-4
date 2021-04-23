@@ -22,21 +22,21 @@ private:
     Address _address_from, _address_to;
     string _car_number, _passenger_name, _driver_name;
     Payment _method;
-    int _sum;
+    int _sum{};
 
 public:
     Order(Address address_from, Address address_to, string car_number = "", string passenger_name = "", string driver_name = "",Payment method = Payment(), int sum = 0){
-        _address_from = address_from;
-        _address_to = address_to;
-        _car_number = car_number;
-        _passenger_name = passenger_name;
-        _driver_name = driver_name;
-        _method = method;
+        _address_from = std::move(address_from);
+        _address_to = std::move(address_to);
+        _car_number = std::move(car_number);
+        _passenger_name = std::move(passenger_name);
+        _driver_name = std::move(driver_name);
+        _method = std::move(method);
         _sum = sum;
     }
     Order(){}
     static Order from_string(string data){
-        string name = "", res = "", car_number_ = "", passenger_name_ = "", driver_name_ = "";
+        string name, res, car_number_, passenger_name_, driver_name_;
         Address address_from_, address_to_;
         int sum_ = 0;
         bool tor = false;
@@ -78,7 +78,7 @@ public:
                 }else if(name == "method"){
                     method_ = Payment::from_string(res);
                 }else if(name == "sum"){
-                    sum_ = string_to_int(res);
+                    sum_ = std::stoi(res);
                 }
                 i+=1;
             }else{
@@ -93,10 +93,10 @@ public:
                      sum_);
     }
     string to_string(){
-        return "{'address_from': "+_address_from.to_string()+", 'address_to': " + _address_to.to_string() + ", 'car_number': " + _car_number + ", 'passenger_name': " + _passenger_name + ", 'driver_name': " + _driver_name + ", 'method': " + _method.to_string() + ", 'sum': " + int_to_string(_sum) + "}";
+        return "{'address_from': "+_address_from.to_string()+", 'address_to': " + _address_to.to_string() + ", 'car_number': " + _car_number + ", 'passenger_name': " + _passenger_name + ", 'driver_name': " + _driver_name + ", 'method': " + _method.to_string() + ", 'sum': " + std::to_string(_sum) + "}";
     }
     bool is_picked(){
-        return _driver_name == "" || _car_number == "";
+        return _driver_name.empty() || _car_number.empty();
     }
     void add_active(){
         ofstream file;
@@ -119,15 +119,38 @@ public:
     string get_passenger_name(){
         return _passenger_name;
     }
+    string get_driver_name(){
+        return _driver_name;
+    }
     void accept(string driver_name, string car_number){
-        _driver_name = driver_name;
-        _car_number = car_number;
+        _driver_name = std::move(driver_name);
+        _car_number = std::move(car_number);
     }
     Address get_address_from(){
         return _address_from;
     }
     Address get_address_to(){
         return _address_to;
+    }
+    void save_history(){
+        string line;
+        ifstream file_input("Drivers/orderHistory/" + _driver_name + ".txt");
+        ofstream file_output("Drivers/orderHistory/" + _driver_name + ".txt");
+        while(getline(file_input,line)){
+            file_output<<line<<endl;
+        }
+        file_output<<to_string()<<endl;
+        file_input.close();
+        file_output.close();
+
+        file_input.open("Passengers/orderHistory/" + _passenger_name + ".txt");
+        file_output.open("Passengers/orderHistory/" + _passenger_name + ".txt");
+        while(getline(file_input,line)){
+            file_output<<line<<endl;
+        }
+        file_output<<to_string()<<endl;
+        file_input.close();
+        file_output.close();
     }
 };
 

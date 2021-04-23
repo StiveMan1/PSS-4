@@ -1,29 +1,23 @@
 # PSS-4
-This code for passengers with using Passenger Gateway
+This code for passengers with using Admin Gateway
 
 
-Passenger Gateway command in console line :
+# Admin Gateway command in console line :
 
 
 login - for login in account
 
 register - registrate account in the system 
 
-info - show all info about user
+show_active_orders - show all active none piked orders
 
-set_payment - change payment method
+show_non_active_cars - show all none active cars and drivers which created this request
 
-set_pinned_address - set address which you can use in orders
+accept_cars - accept or dicline car for driver
 
-order_driver - ordering the driver where you can choose address from and address to and choose on of the different types of cars
+block_passenger - block or un block passenger by name
 
-show_history - show all history of orders in this account
-
-show_position - show current position in the trip
-
-show_order - show current order after driver accepting
-
-rate_driver - rate driver of current trip
+block_driver - block or un block driver by name
 
 LogOut - log out from current account
 
